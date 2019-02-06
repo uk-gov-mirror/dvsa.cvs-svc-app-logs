@@ -1,13 +1,13 @@
 {
-  "name": "mes-microservices-starter-template",
+  "name": "mes-logs-service",
   "version": "0.1.0",
   "author": "DVSA",
   "license": "MIT",
-  "description": "A starter template for lambda microservices in the MES project",
-  "homepage": "https://github.com/dvsa/mes-microservices-starter-template#README.md",
+  "description": "A serverless microservice responsible reporting error logs from the mes-mobile-app",
+  "homepage": "https://github.com/dvsa/mes-logs-service#README.md",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/dvsa/mes-microservices-starter-template.git"
+    "url": "git+https://github.com/dvsa/mes-logs-service.git"
   },
   "dependencies": {
     "aws-sdk": "^2.389.0",
@@ -27,7 +27,6 @@
     "json-schema-to-typescript": "^6.1.0",
     "rimraf": "^2.6.2",
     "serverless": "^1.36.3",
-    "serverless-dynamodb-local": "^0.2.35",
     "serverless-offline": "^4.2.0",
     "serverless-webpack": "^5.2.0",
     "supertest": "^3.4.2",
@@ -42,16 +41,13 @@
   "scripts": {
     "clean": "rimraf build artefacts",
     "compile": "rm -rf build && tsc",
-    "bootstrap": "json2ts schema/exampleSchema.json > src/common/domain/Schema.d.ts",
     "lint": "tslint --project tslint.json",
     "package": "./package.sh",
-    "postci": "npm run bootstrap",
-    "postinstall": "npm run bootstrap",
     "prepush": "npm run security-scan && npm run lint && npm test",
     "security-scan": "git secrets --scan && git log -p | scanrepo",
-    "start": "npm run compile && sls dynamodb install && sls offline start",
+    "start": "npm run compile && sls offline start",
     "test": "npm run compile && jasmine",
-    "test:integration": "npm run compile && jasmine build/spec/example.spec.js"
+    "test:integration": "npm run compile && jasmine build/spec/logs-service.spec.js"
   },
   "husky": {
     "hooks": {
@@ -59,6 +55,6 @@
     }
   },
   "bugs": {
-    "url": "https://github.com/dvsa/mes-microservices-starter-template/issues"
+    "url": "https://github.com/dvsa/mes-logs-service/issues"
   }
 }

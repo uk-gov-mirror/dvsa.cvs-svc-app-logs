@@ -1,6 +1,7 @@
-# mes-microservices-starter-template
+# mes-logs-service
 
-A serverless microservice template.
+A serverless microservice responsible reporting error logs from the mes-mobile-app
+
 
 ## Structure
 
@@ -12,14 +13,6 @@ As per the principles of Hexagonal Architecture, each function has the following
 * `framework` - contains all Inbound and Outbound Adapters, and all use of external/proprietary APIs - depends upon...
 * `application` - contains all Inbound and Outbound Ports, doesn't use any external/proprietary APIs - depends upon...
 * `domain` - contains all domain objects (Aggregates, Objects, Value classes etc) with all "business logic" (not just anaemic data holders), doesn't use any external/proprietary APIs.
-
-## Bootstrap
-
-The domain model for the service is maintained as a JSON Schema. In order to compile the project, you need to generate the type information:
-
-```shell
-npm run bootstrap
-```
 
 ## Build
 
