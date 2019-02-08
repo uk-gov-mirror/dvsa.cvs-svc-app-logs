@@ -1,0 +1,24 @@
+service: mes-logs-service
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+
+package:
+  individually: true
+
+functions:
+  postLogs:
+    handler: src/functions/postLogs/framework/handler.handler
+    events:
+      - http:
+          path: 'logs'
+          method: post
+
+custom:
+  webpack:
+    webpackConfig: 'webpack-sls-offline.config.js'
+
+plugins:
+  - serverless-webpack
+  - serverless-offline

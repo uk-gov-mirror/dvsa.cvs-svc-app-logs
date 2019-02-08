@@ -1,0 +1,24 @@
+{
+    "compilerOptions": {
+      "outDir": "./build",
+      "strict": true,
+      "allowJs": false,
+      "lib": [
+        "es2017",
+        "dom"
+      ],
+      "target": "es5",
+      "types" : [
+        "node",
+        "jasmine",
+      ],
+      "experimentalDecorators": true
+    },
+    "include": [
+      "./src/**/*",
+      "./spec/**/*"
+    ],
+    "exclude": [
+      "node_modules"
+    ]
+  }
