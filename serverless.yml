@@ -9,7 +9,7 @@ package:
 
 functions:
   get:
-    handler: src/functions/post/framework/handler.handler
+    handler: src/functions/postLogs/framework/handler.handler
     events:
       - http:
           path: 'logs'
