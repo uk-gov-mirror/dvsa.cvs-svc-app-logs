@@ -57,21 +57,16 @@ export async function createLogger(loggerName: string, cloudWatchLogGroupName: s
       ? (Array.isArray(logMessages) ? logMessages : [logMessages])
       : [])
       .map((logMessage) => {
-        if (logMessage === null || logMessage === undefined) {
-          return {
-            logService_logMessageWasNull: true,
-          };
-        }
-        return logMessage;
-      })
-      .map((logMessage) => {
-        let timestamp: number;
+        let timestamp: number = new Date().getTime();
 
-        if (logMessage.timestamp === null || logMessage.timestamp === undefined) {
-          timestamp = new Date().getTime();
-          logMessage['logService_timestampProvidedByLogService'] = true;
-        } else {
-          timestamp = logMessage.timestamp;
+        if (logMessage !== null && logMessage !== undefined) {
+          if (logMessage.timestamp === null || logMessage.timestamp === undefined) {
+            if (typeof (logMessage) === 'object') {
+              logMessage['timestampProvidedByLogService'] = true;
+            }
+          } else {
+            timestamp = logMessage.timestamp;
+          }
         }
 
         return {
