@@ -1,8 +1,8 @@
 import { CloudWatchLogs } from 'aws-sdk';
 import { randomBytes } from 'crypto';
 
-export type LogEvent = { timestamp: number, message: object | string };
-export type Logger = (logEvents: LogEvent[] | LogEvent) => Promise<number>;
+export type LogMessage = { timestamp?: number, [propName: string]: any };
+export type Logger = (logMessages: LogMessage[] | LogMessage) => Promise<number>;
 
 export const uniqueLogStreamName = (loggerName: string): string => {
   const date = new Date();
@@ -30,15 +30,10 @@ async function createCloudWatchLogger(loggerName: string, logGroupName: string) 
 
   const cloudWatchLogger = async (logEvents: CloudWatchLogs.InputLogEvents) => {
     const logResult = await cloudWatchLogs.putLogEvents({
+      logEvents,
       logGroupName,
       logStreamName,
       sequenceToken,
-      logEvents: logEvents.map(logEvent => {
-        return {
-          message: JSON.stringify(logEvent.message),
-          timestamp: logEvent.timestamp
-        };
-      }),
     }).promise();
 
     sequenceToken = logResult.nextSequenceToken;
@@ -57,28 +52,43 @@ export async function createLogger(loggerName: string, cloudWatchLogGroupName: s
     : null;
 
   // Create and return the logging delegate
-  const logger: Logger = async (logEvents: LogEvent[] | LogEvent) => {
-    logEvents = logEvents ?
-      (Array.isArray(logEvents) ? logEvents : [ logEvents ])
-      : [];
+  const logger: Logger = async (logMessages: LogMessage[] | LogMessage) => {
+    const awsLogEvents = (logMessages
+      ? (Array.isArray(logMessages) ? logMessages : [logMessages])
+      : [])
+      .map((logMessage) => {
+        if (logMessage === null || logMessage === undefined) {
+          return {
+            logService_logMessageWasNull: true,
+          };
+        }
+        return logMessage;
+      })
+      .map((logMessage) => {
+        let timestamp: number;
 
-    const logEventsFormatted = logEvents.map(logEvent => {
-      return {
-        message: typeof(logEvent.message) === "string" ? logEvent.message : JSON.stringify(logEvent.message),
-        timestamp: logEvent.timestamp
-      };
-    });
+        if (logMessage.timestamp === null || logMessage.timestamp === undefined) {
+          timestamp = new Date().getTime();
+          logMessage['logService_timestampProvidedByLogService'] = true;
+        } else {
+          timestamp = logMessage.timestamp;
+        }
 
-    if (logEventsFormatted.length > 0) {
+        return {
+          timestamp,
+          message: JSON.stringify(logMessage),
+        };
+      });
+
+    if (awsLogEvents.length > 0) {
       if (cloudWatchLogger) {
-        await cloudWatchLogger(logEventsFormatted);
-      }
-      else {
-        console.log('logEvents: %O', logEventsFormatted);
+        await cloudWatchLogger(awsLogEvents);
+      } else {
+        console.log('awsLogEvents: %O', awsLogEvents);
       }
     }
 
-    return logEventsFormatted.length;
+    return awsLogEvents.length;
   };
 
   return logger;
