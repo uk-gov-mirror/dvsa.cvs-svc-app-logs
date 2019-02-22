@@ -15,10 +15,25 @@ export class Logger {
     this.logDelegate = logDelegate;
   }
 
+  /**
+   * Sends the specified `LogMessage(s)` to the logging system.
+   * @param logMessages The messages to log; either a single `LogMessage`, or an array of `LogMessages`.
+   * @returns `Promise` for completing the action, which returns the number of `LogMessages` that were
+   * supplied and saved.
+   */
   logMessages(logMessages: LogMessage[] | LogMessage): Promise<number> {
     return this.logDelegate(logMessages);
   }
 
+  /**
+   * Sends a `LogMessage`, with the specified message string, log level and
+   * optional additional log data, to the logging system.
+   * @param message The message string to log.
+   * @param logLevel The severity of the `LogMessage`.
+   * @param logData Optional, any additional data to include in the `LogMessage`.
+   * @returns Promise for completing the action, which returns the number of `LogMessages` that were
+   * saved (for this function, always 1).
+   */
   log(message: string, logLevel: LogLevel, logData?: Bag): Promise<number> {
     return this.logMessages(Object.assign(
       {
@@ -69,6 +84,12 @@ async function createCloudWatchLogger(loggerName: string, logGroupName: string) 
   return cloudWatchLogger;
 }
 
+/**
+ * Creates a `Logger` object, which can be used to send `LogMessage(s)` to the logging system.
+ * @param loggerName The name for the logger.
+ * @param cloudWatchLogGroupName The name for the AWS CloudWatch log group to send logs to.
+ * @returns `Promise` for completing the action, which returns the created `Logger`.
+ */
 export async function createLogger(loggerName: string, cloudWatchLogGroupName: string | undefined): Promise<Logger> {
   // If the `cloudWatchLogGroupName` variable is set then log to that CloudWatch log group.
   // This is also used to indicate we are running in the infrastructure, so the Amazon SDK will
