@@ -1,8 +1,34 @@
 import { CloudWatchLogs } from 'aws-sdk';
 import { randomBytes } from 'crypto';
 
+type LogLevel = 'debug' | 'info' | 'warn' | 'error';
+type Bag = { [propName: string]: any };
+
 export type LogMessage = { timestamp?: number, [propName: string]: any };
-export type Logger = (logMessages: LogMessage[] | LogMessage) => Promise<number>;
+
+type LogDelegate = (logMessages: LogMessage[] | LogMessage) => Promise<number>;
+
+export class Logger {
+  private logDelegate: LogDelegate;
+
+  constructor(logDelegate: LogDelegate) {
+    this.logDelegate = logDelegate;
+  }
+
+  logMessages(logMessages: LogMessage[] | LogMessage): Promise<number> {
+    return this.logDelegate(logMessages);
+  }
+
+  log(message: string, logLevel: LogLevel, logData?: Bag): Promise<number> {
+    return this.logMessages(Object.assign(
+      {
+        message,
+        logLevel,
+        timestamp: new Date().getTime(),
+      },
+      logData));
+  }
+}
 
 export const uniqueLogStreamName = (loggerName: string): string => {
   const date = new Date();
@@ -52,7 +78,7 @@ export async function createLogger(loggerName: string, cloudWatchLogGroupName: s
     : null;
 
   // Create and return the logging delegate
-  const logger: Logger = async (logMessages: LogMessage[] | LogMessage) => {
+  const logDelegate: LogDelegate = async (logMessages: LogMessage[] | LogMessage) => {
     const awsLogEvents = (logMessages
       ? (Array.isArray(logMessages) ? logMessages : [logMessages])
       : [])
@@ -86,5 +112,5 @@ export async function createLogger(loggerName: string, cloudWatchLogGroupName: s
     return awsLogEvents.length;
   };
 
-  return logger;
+  return new Logger(logDelegate);
 }

@@ -11,14 +11,16 @@ export async function handler(event: APIGatewayProxyEvent, fnCtx: Context): Prom
   }
 
   if (event.body) {
-    const logEvents = <LogMessage[] | LogMessage>JSON.parse(event.body);
+    const logMessages = <LogMessage[] | LogMessage>JSON.parse(event.body);
 
-    const numOfLogEvents = await logger(logEvents);
+    const numOfLogMessages = await logger.logMessages(logMessages);
 
-    return createResponse({ message: `${numOfLogEvents} log events were received and saved.` });
+    await logger.log(`${numOfLogMessages} log messages were received and saved.`, 'debug', { numOfLogMessages });
+
+    return createResponse({ message: `${numOfLogMessages} log messages were received and saved.` });
   }
 
   return createResponse(
-    { message: 'Bad Request: request body should contain JSON array of log events.' },
+    { message: 'Bad Request: request body should contain JSON array of log messages.' },
     400);
 }
