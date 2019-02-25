@@ -1,29 +1,65 @@
 import { HttpStatus } from './../../../../common/application/api/HttpStatus';
-import * as aws from 'aws-sdk-mock';
-import { handler } from '../handler';
-const lambdaTestUtils = require('aws-lambda-test-utils');
-import * as createResponse from '../../../../common/application/utils/createResponse';
-import { APIGatewayEvent, Context } from 'aws-lambda';
+import { Mock, It, Times } from 'typemoq';
+import { APIGatewayProxyEvent, Context } from 'aws-lambda';
+import * as createLogger from '../createLogger';
+import * as handler from '../handler';
 
-describe('post handler', () => {
-  let dummyApigwEvent: APIGatewayEvent;
-  let dummyContext: Context;
-  let createResponseSpy: jasmine.Spy;
+describe('handler', () => {
+  const moqEvent = Mock.ofType<APIGatewayProxyEvent>();
+  const moqContext = Mock.ofType<Context>();
+
+  const sut = handler.handler;
 
   beforeEach(() => {
-    createResponseSpy = spyOn(createResponse, 'default');
-    dummyApigwEvent = lambdaTestUtils.mockEventCreator.createAPIGatewayEvent({
-    });
-    dummyContext = lambdaTestUtils.mockContextCreator(() => null);
+    moqEvent.reset();
+    moqContext.reset();
+
+    moqEvent.setup(x => x.body).returns(() => null);
+
+    delete process.env.MOBILE_APP_LOGS_CWLG_NAME;
   });
 
-  describe('given the handler recieves a log', () => {
-    it('should return a successful response', async () => {
-      createResponseSpy.and.returnValue({ statusCode: 200 });
+  it('should call `createLogger` as expected', async () => {
+    handler.setLogger(null);
 
-      const resp: any = await handler(dummyApigwEvent, dummyContext);
+    delete process.env.MOBILE_APP_LOGS_CWLG_NAME;
+    process.env.MOBILE_APP_LOGS_CWLG_NAME = 'example-mobile-app-cwlg-name';
 
-      expect(resp.statusCode).toBe(200);
-    });
+    const moqCreateLogger = Mock.ofInstance(createLogger.createLogger);
+    spyOn(createLogger, 'createLogger').and.callFake(moqCreateLogger.object);
+
+    // ACT
+    await sut(moqEvent.object, moqContext.object);
+
+    // ASSERT
+    moqCreateLogger.verify(
+      x => x('LogsServiceLogger', 'example-mobile-app-cwlg-name'),
+      Times.once());
   });
+
+  it('should return 400 Bad Request if the HTTP request body is null', async () => {
+    moqEvent.setup(x => x.body).returns(() => null);
+
+    // ACT
+    const result = await sut(moqEvent.object, moqContext.object);
+
+    // ASSERT
+    expect(result.statusCode).toEqual(400);
+    expect(result.statusCode).toEqual(HttpStatus.BAD_REQUEST);
+    expect(result.body).toMatch(/Bad Request: request body should contain JSON array of log messages/);
+  });
+
+  it('should return 400 Bad Request if the HTTP request body is undefined', async () => {
+    moqEvent.setup(x => x.body).returns(() => <any><unknown>undefined);
+
+    // ACT
+    const result = await sut(moqEvent.object, moqContext.object);
+
+    // ASSERT
+    expect(result.statusCode).toEqual(400);
+    expect(result.statusCode).toEqual(HttpStatus.BAD_REQUEST);
+    expect(result.body).toMatch(/Bad Request: request body should contain JSON array of log messages/);
+  });
+
+  // rs-todo: resume here: handler tests
 });

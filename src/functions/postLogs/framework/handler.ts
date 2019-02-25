@@ -8,9 +8,9 @@ import { createLogger } from './createLogger';
 
 let logger: Logger | null = null;
 
-export async function handler(event: APIGatewayProxyEvent, fnCtx: Context): Promise<Response> { // rs-todo: tests
+export async function handler(event: APIGatewayProxyEvent, fnCtx: Context): Promise<Response> {
   if (logger === null) {
-    logger = await createLogger('LogsService', process.env.MOBILE_APP_LOGS_CWLG_NAME);
+    logger = await createLogger('LogsServiceLogger', process.env.MOBILE_APP_LOGS_CWLG_NAME);
   }
 
   if (event.body) {
@@ -20,13 +20,17 @@ export async function handler(event: APIGatewayProxyEvent, fnCtx: Context): Prom
 
     await logger.logEvents(logEvents);
 
-    // rs-todo: rem this next line:
-    await logger.log(`${numOfLogEvents} log messages were received and saved.`, 'debug', { numOfLogEvents });
-
     return createResponse({ message: `${numOfLogEvents} log messages were received and saved.` });
   }
 
   return createResponse(
     { message: 'Bad Request: request body should contain JSON array of log messages.' },
     400);
+}
+
+/**
+ * Ability to explicitly set the Logger, for use by the tests.
+ */
+export async function setLogger(loggerOverride: Logger | null) {
+  logger = loggerOverride;
 }

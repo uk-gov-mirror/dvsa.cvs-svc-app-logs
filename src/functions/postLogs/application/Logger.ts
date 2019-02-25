@@ -38,7 +38,7 @@ export default class Logger { // rs-todo: tests
    * @returns `Promise` for completing the async action.
    */
   async log(message: string, logLevel: LogLevel, logData?: Bag): Promise<void> {
-    const eventMessage = Object.assign({ message, logLevel }, logData);
+    const eventMessage = Object.assign({ message, logLevel, loggerName: this.loggerName }, logData);
 
     await this.logEvents([{
       timestamp: new Date().getTime(),

@@ -1,7 +1,6 @@
 import * as awsSdkMock from 'aws-sdk-mock';
 import { Mock, It, Times } from 'typemoq';
 import { CloudWatchLogs, Request, AWSError } from 'aws-sdk';
-import { PromiseResult } from 'aws-sdk/lib/request';
 import * as logger from '../createLogger';
 import { LogDelegate } from '../../application/Logger';
 
