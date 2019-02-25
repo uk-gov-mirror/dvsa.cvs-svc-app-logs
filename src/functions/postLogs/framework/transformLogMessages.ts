@@ -1,7 +1,7 @@
 import LogEvent from '../application/LogEvent';
 import LogMessage from './LogMessage';
 
-export default function transformLogMessages(logMessages: LogMessage[] | LogMessage): LogEvent[] { // rs-todo: tests
+export default function transformLogMessages(logMessages: LogMessage[] | LogMessage): LogEvent[] {
   return (logMessages
     ? (Array.isArray(logMessages) ? logMessages : [logMessages])
     : [])
