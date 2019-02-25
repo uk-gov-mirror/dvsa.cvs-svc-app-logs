@@ -80,7 +80,7 @@ describe('handler', () => {
       spyOn(transformLogMessages, 'default').and.callFake(moqTransformLogMessages.object);
 
       moqTransformLogMessages.setup(x => x(It.isAny()))
-        .returns(() => Array(12).fill(Mock.ofType<LogEvent>()));
+        .returns(() => Array(12).fill(Mock.ofType<LogEvent>().object));
 
       // ACT
       const result = await sut(moqEvent.object, moqContext.object);

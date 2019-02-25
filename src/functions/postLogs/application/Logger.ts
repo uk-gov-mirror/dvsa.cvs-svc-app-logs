@@ -5,7 +5,7 @@ type Bag = { [propName: string]: any };
 
 export type LogDelegate = (logEvents: LogEvent[]) => Promise<void>;
 
-export default class Logger { // rs-todo: tests
+export default class Logger {
   private logDelegate: LogDelegate;
 
   loggerName: string;
