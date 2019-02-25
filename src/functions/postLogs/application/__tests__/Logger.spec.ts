@@ -31,7 +31,7 @@ describe('handler', () => {
       spyOn(console, 'error').and.callFake(moqConsoleError.object);
 
       // ACT
-      await await sut.logEvents([Mock.ofType<LogEvent>().object]);
+      await sut.logEvents([Mock.ofType<LogEvent>().object]);
 
       // ASSERT
       moqConsoleError.verify(
