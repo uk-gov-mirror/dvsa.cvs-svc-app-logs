@@ -15,19 +15,32 @@ describe('integration test', () => {
       done();
     });
   });
+
   afterAll(() => {
     stopSlsOffline();
   });
 
   it('should respond 200 for a successful post', (done) => {
-   /* request
-      .post('/log')
+    request
+      .post('/logs')
+      .send({
+        timestamp: new Date().getTime(),
+        message: 'Test error message',
+      })
       .expect(200)
       .end((err) => {
         if (err) throw err;
         done();
-      }); */
-    expect(true);
-    done();
+      });
+  });
+
+  it('should respond 400 for a bad request', (done) => {
+    request
+      .post('/logs')
+      .expect(400)
+      .end((err) => {
+        if (err) throw err;
+        done();
+      });
   });
 });
