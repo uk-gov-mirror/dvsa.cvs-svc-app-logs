@@ -4,7 +4,7 @@ import { CloudWatchLogs } from 'aws-sdk';
 import * as logger from '../createLogger';
 import { LogDelegate } from '../../application/Logger';
 
-describe('logger', () => {
+describe('logging', () => {
   const originalConsoleLog = console.log;
   const moqConsoleLog = Mock.ofInstance(console.log);
   const moqCreateLogStream = Mock.ofInstance(new CloudWatchLogs().createLogStream);

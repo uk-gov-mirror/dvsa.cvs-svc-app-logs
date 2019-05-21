@@ -2,7 +2,7 @@ import { Mock, It, Times } from 'typemoq';
 import LogEvent from '../LogEvent';
 import Logger, { LogDelegate } from '../Logger';
 
-describe('handler', () => {
+describe('Logger', () => {
   const moqLogDelegate = Mock.ofType<LogDelegate>();
   let sut: Logger;
 
