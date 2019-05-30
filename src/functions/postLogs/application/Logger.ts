@@ -45,4 +45,13 @@ export default class Logger {
       message: JSON.stringify(eventMessage),
     }]);
   }
+
+  customMetric(name: string, description: string, value: number): void {
+    console.log(JSON.stringify({
+      name,
+      description,
+      value,
+      service: 'logs-service',
+    }));
+  }
 }

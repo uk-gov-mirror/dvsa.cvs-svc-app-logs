@@ -19,7 +19,7 @@ export async function handler(event: APIGatewayProxyEvent, fnCtx: Context): Prom
     const numOfLogEvents = logEvents.length;
 
     await logger.logEvents(logEvents);
-
+    logger.customMetric('LogsPosted', 'Number of logs posted', numOfLogEvents);
     return createResponse({ message: `${numOfLogEvents} log messages were received and saved.` });
   }
 
