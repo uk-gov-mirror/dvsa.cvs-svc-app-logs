@@ -52,7 +52,7 @@
     "package": "./package.sh",
     "prepush": "npm run security-scan && npm run lint && npm test",
     "build": "node_modules/typescript/bin/tsc --rootDir ./ --outDir .build --sourceMap false && npm run build:copy",
-    "build:copy": "find src -type f \\( -name \"*.yml\" -or -name \"*.json\" \\) | cpio -pdm .build && find tests -type f \\( -name \"*.yml\" -or -name \"*.json\" -or -name \"*.base64\" \\)  | cpio -pdm .build",
+    "build:copy": "find src -type f \\( -name \"*.yml\" -or -name \"*.json\" \\) | cpio -pdm .build && find specs -type f \\( -name \"*.yml\" -or -name \"*.json\" -or -name \"*.base64\" \\)  | cpio -pdm .build",
     "security-scan": "git secrets --scan && git log -p | scanrepo",
     "start": "npm run compile && sls offline start",
     "test": "npm run compile && jasmine",
@@ -60,6 +60,7 @@
     "test:integration": "npm run compile && jasmine build/spec/logs-service.spec.js",
     "compile-no-emit": "tsc --noEmit -p .",
     "lint:fix": "tslint --fix -p ./"
+    "audit-dep": "npm audit"
   },
   "nyc": {
     "require": [
