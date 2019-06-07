@@ -1,13 +1,13 @@
 {
-  "name": "mes-logs-service",
+  "name": "cvs-svc-app-logs",
   "version": "0.1.0",
   "author": "DVSA",
   "license": "MIT",
-  "description": "A serverless microservice responsible reporting error logs from the mes-mobile-app",
-  "homepage": "https://github.com/dvsa/mes-logs-service#README.md",
+  "description": "A serverless microservice responsible reporting error logs from the cvs-svc-app-logs",
+  "homepage": "https://github.com/dvsa/cvs-svc-app-logs#README.md",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/dvsa/mes-logs-service.git"
+    "url": "git+https://github.com/dvsa/cvs-svc-app-logs.git"
   },
   "dependencies": {
     "aws-sdk": "^2.389.0",
@@ -83,6 +83,6 @@
     }
   },
   "bugs": {
-    "url": "https://github.com/dvsa/mes-logs-service/issues"
+    "url": "https://github.com/dvsa/cvs-svc-app-logs/issues"
   }
 }

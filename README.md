@@ -1,6 +1,6 @@
-# mes-logs-service
+# cvs-svc-app-logs
 
-A serverless microservice responsible reporting error logs from the mes-mobile-app
+A serverless microservice responsible reporting error logs from the cvs-mobile-app
 
 
 ## Structure

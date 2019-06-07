@@ -1,4 +1,4 @@
-service: mes-logs-service
+service: cvs-svc-app-logs
 
 provider:
   name: aws
