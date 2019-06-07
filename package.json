@@ -59,7 +59,7 @@
     "test:jasmine-coverage": "nyc npm run test",
     "test:integration": "npm run compile && jasmine build/spec/logs-service.spec.js",
     "compile-no-emit": "tsc --noEmit -p .",
-    "lint:fix": "tslint --fix -p ./"
+    "lint:fix": "tslint --fix -p ./",
     "audit-dep": "npm audit"
   },
   "nyc": {
