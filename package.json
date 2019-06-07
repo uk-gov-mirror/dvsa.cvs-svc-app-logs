@@ -61,7 +61,7 @@
     "test:integration": "npm run compile && jasmine build/spec/logs-service.spec.js",
     "compile-no-emit": "tsc --noEmit -p .",
     "lint:fix": "tslint --fix -p ./",
-    "sonar-scanner": "BRANCH=local npm run tslint && npm run coverage && sonar-scanner",
+    "sonar-scanner": "BRANCH=local npm run tslint && npm run test:jasmine-coverage && sonar-scanner",
     "audit-dep": "npm audit"
   },
   "nyc": {
