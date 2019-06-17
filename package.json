@@ -81,12 +81,6 @@
     "produce-source-map": true,
     "instrument": true
   },
-  "husky": {
-    "hooks": {
-      "pre-push": "npm run security-scan && npm run lint && npm test && npm run test:integration",
-      "pre-commit": "run-s lint:fix lint compile-no-emit"
-    }
-  },
   "bugs": {
     "url": "https://github.com/dvsa/cvs-svc-app-logs/issues"
   }
