@@ -55,12 +55,12 @@
     "security-scan": "git secrets --scan && git log -p | scanrepo",
     "start": "npm run compile && sls offline start",
     "test": "npm run compile && jasmine",
-    "tslint": "node_modules/tslint/bin/tslint --project tsconfig.json -q",
+    "tslint": "node_modules/tslint/bin/tslint --project tsconfig.json",
     "test:jasmine-coverage": "nyc npm run test",
     "test:integration": "npm run compile && jasmine build/spec/logs-service.spec.js",
     "compile-no-emit": "tsc --noEmit -p .",
     "lint:fix": "tslint --fix -p ./",
-    "sonar-scanner": "BRANCH=local npm run tslint && npm run test:jasmine-coverage && sonar-scanner",
+    "sonar-scanner": "npm run tslint && npm run test:jasmine-coverage && sonar-scanner",
     "audit-dep": "npm audit"
   },
   "nyc": {
