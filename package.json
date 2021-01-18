@@ -66,7 +66,8 @@
     "compile-no-emit": "tsc --noEmit -p .",
     "lint:fix": "tslint --fix -p ./",
     "sonar-scanner": "npm run tslint && npm run test:jasmine-coverage && sonar-scanner",
-    "audit-dep": "npm audit --json | node_modules/.bin/audit-filter --nsp-config=.nsprc --audit=-",
+    "audit:check": "npm audit --json | node_modules/.bin/audit-filter --nsp-config=.nsprc --audit=-",
+    "audit-dep": "npm audit",
     "package": "mkdir ${ZIP_NAME} && cp package.json package-lock.json ${ZIP_NAME}/ && cp -r .build/src/* ${ZIP_NAME}/ && cd ${ZIP_NAME} && npm ci --production && rm package.json package-lock.json && zip -qr ../${ZIP_NAME}.zip .",
     "tools-setup": "echo 'Nothing to do'"
   },
