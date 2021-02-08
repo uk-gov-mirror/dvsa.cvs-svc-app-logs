@@ -66,7 +66,7 @@
     "lint:fix": "tslint --fix -p ./",
     "sonar-scanner": "AWS_XRAY_CONTEXT_MISSING=LOG_ERROR npm run tslint && AWS_XRAY_CONTEXT_MISSING=LOG_ERROR npm run test:jasmine-coverage && sonar-scanner",
     "audit-dep": "npm audit --json | node_modules/.bin/audit-filter --nsp-config=.nsprc --audit=-",
-    "package": "cp package.json package-lock.json build/ && cp -r .build/src/* build/ && cd build  && npm ci --production && rm package.json package-lock.json && zip -qr ../../build.zip .",
+    "package": "cp package.json package-lock.json build/ && cp -r .build/src/* build/ && cd build  && npm ci --production && rm package.json package-lock.json && zip -qr ../build.zip .",
     "security-checks": "npm audit --audit-level=critical && git secrets --register-aws && git secrets --scan && git log -p | scanrepo",
     "tools-setup": "echo 'Nothing to do'"
   },
