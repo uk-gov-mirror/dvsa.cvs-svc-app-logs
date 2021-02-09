@@ -1,0 +1,9 @@
+{
+  "version": "VERSION",
+  "runtime": "nodejs12.x",
+  "handler": "functions/postLogs/framework/handler.handler",
+  "description": "This is app logs v1",
+  "memory_size": 128,
+  "timeout": 30,
+  "env_vars": {}
+}
